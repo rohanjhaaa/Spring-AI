@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: openAI
+
+  ai:
+    model:
+      chat: ollama
+    ollama:
+      chat:
+        model: llama3.2:1b
