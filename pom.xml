@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ai</groupId>
-	<artifactId>openAI</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>GemmaAI</artifactId>
+	<version>2026.0.0</version>
 	<name/>
 	<description/>
 	<url/>
@@ -35,16 +35,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
-		<!--openAI-->
-		<!--<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-model-openai</artifactId>
-		</dependency>-->
-
-		<!--ollama-->
+		<!--openAI dependency can also be used with other model-->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-model-ollama</artifactId>
+			<artifactId>spring-ai-starter-model-openai</artifactId>
 		</dependency>
 
 		<dependency>

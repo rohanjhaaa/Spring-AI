@@ -3,8 +3,8 @@ spring:
     name: openAI
 
   ai:
-    model:
-      chat: ollama
-    ollama:
+    openai:
       chat:
-        model: llama3.2:1b
+        model: ai/gemma3
+        base-url: http://localhost:12434/engines/v1
+      api-key: dummy
