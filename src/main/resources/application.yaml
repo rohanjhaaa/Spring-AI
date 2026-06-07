@@ -1,10 +1,22 @@
 spring:
   application:
-    name: openAI
+    name: aws-bedrock
 
   ai:
     model:
-      chat: ollama
-    ollama:
-      chat:
-        model: llama3.2:1b
+      chat: bedrock-converse
+      tool:
+        enabled: false
+    bedrock:
+      aws:
+         region: us-east-1
+         access-key: ${ACCESS_KEY}
+         secret-key: ${SECRET_KEY}
+      converse:
+        chat:
+          options:
+            model: global.anthropic.claude-opus-4-6-v1
+
+logging:
+  level:
+    org.springframework.ai: DEBUG

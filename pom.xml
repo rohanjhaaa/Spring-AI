@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.6</version>
+		<version>3.5.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ai</groupId>
-	<artifactId>openAI</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>bedrock</artifactId>
+	<version>2026.0.0</version>
 	<name/>
 	<description/>
 	<url/>
@@ -28,29 +28,17 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
-		<spring-ai.version>2.0.0-M8</spring-ai.version>
+		<spring-ai.version>1.1.0</spring-ai.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webmvc</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!--openAI-->
-		<!--<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-model-openai</artifactId>
-		</dependency>-->
-
-		<!--ollama-->
+		<!--openAI dependency can be used with other model as well-->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-model-ollama</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webmvc-test</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-ai-starter-model-bedrock-converse</artifactId>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
