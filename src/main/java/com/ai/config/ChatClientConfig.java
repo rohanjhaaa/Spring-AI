@@ -1,6 +1,8 @@
 package com.ai.config;
 
+import com.ai.advisors.TokenUsageAuditAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class ChatClientConfig {
@@ -41,7 +45,10 @@ public class ChatClientConfig {
 
     @Bean
     public ChatClient openAiChatClient(OpenAiChatModel openAiChatModel) {
-        ChatClient.Builder chatClientBuilder = ChatClient.builder(openAiChatModel);
+        var chatOptions = OpenAiChatOptions.builder().model("gpt-5.4-mini").temperature(0.8);
+        ChatClient.Builder chatClientBuilder = ChatClient.builder(openAiChatModel)
+                .defaultOptions(chatOptions.build())
+                .defaultAdvisors(List.of(new SimpleLoggerAdvisor(), new TokenUsageAuditAdvisor()));
         return chatClientBuilder.build();
     }
 
@@ -52,7 +59,8 @@ public class ChatClientConfig {
 
     @Bean
     public ChatClient ollamaChatClient(@Qualifier("llamaModel")OllamaChatModel ollamaChatModel){
-        ChatClient.Builder chatClientBuilder = ChatClient.builder(ollamaChatModel);
+        ChatClient.Builder chatClientBuilder = ChatClient.builder(ollamaChatModel)
+                .defaultAdvisors(new SimpleLoggerAdvisor());
         return chatClientBuilder.build();
     }
 

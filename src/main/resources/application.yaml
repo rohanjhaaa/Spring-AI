@@ -16,6 +16,12 @@ spring:
 
 logging:
   level:
-    org.springframework.ai: DEBUG
-    #org.springframework.web.client: DEBUG
-    org.springframework.web.client: TRACE
+    org:
+      springframework:
+        ai:
+          root: DEBUG  # Sets org.springframework.ai to DEBUG
+          chat:
+            client:
+              advisor: DEBUG # Sets org.springframework.ai.chat.client.advisor to DEBUG
+        web:
+          client: TRACE # Sets org.springframework.web.client to TRACE
