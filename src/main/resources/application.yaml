@@ -13,6 +13,15 @@ spring:
     chat:
       client:
         enabled: false
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+#Datasource
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring-ai
+    username: root
+    password: root
 
 logging:
   level:
