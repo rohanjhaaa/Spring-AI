@@ -12,14 +12,23 @@ import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 
 import java.util.List;
+import java.util.Vector;
 
 @Configuration
 public class ChatMemoryConfig {
+
+    @Value("classpath:/promptTemplate/systemPromptDocDataTemplate.st")
+    Resource promptHRTemplate;
 
     @Bean
     ChatMemory chatMemory(JdbcChatMemoryRepository jdbcChatMemoryRepository){
@@ -63,11 +72,23 @@ public class ChatMemoryConfig {
 //    }
 
     @Bean("gemmaChatMemoryClient")
-    public ChatClient gemmaChatClient(@Qualifier("memoryGemmaModel") OllamaChatModel gemmaModel, ChatMemory chatMemory) {
+    public ChatClient gemmaChatClient(@Qualifier("memoryGemmaModel") OllamaChatModel gemmaModel, ChatMemory chatMemory, RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
         Advisor memoryAdvisor =  MessageChatMemoryAdvisor.builder(chatMemory).build();
+        Advisor tokenUsageAdvisor = new TokenUsageAuditAdvisor();
         ChatClient.Builder chatClientBuilder = ChatClient.builder(gemmaModel)
-                .defaultAdvisors(List.of(new SimpleLoggerAdvisor(), memoryAdvisor));
+                .defaultSystem(promptHRTemplate)
+                .defaultAdvisors(List.of(new SimpleLoggerAdvisor(), memoryAdvisor,tokenUsageAdvisor,retrievalAugmentationAdvisor));
         return chatClientBuilder.build();
+    }
+
+    @Bean
+    RetrievalAugmentationAdvisor retrievalAugmentationAdvisor(VectorStore vectorStore){
+        return RetrievalAugmentationAdvisor.builder()
+                .documentRetriever(VectorStoreDocumentRetriever.builder().vectorStore(vectorStore)
+                        .topK(3)
+                        .similarityThreshold(0.5)
+                        .build())
+                .build();
     }
 
 //    @Bean

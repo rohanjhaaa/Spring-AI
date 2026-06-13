@@ -6,8 +6,13 @@ spring:
     ollama:
       chat:
         model: llama3.2:1b
+      embedding:
+        options:
+          model: nomic-embed-text
     openai:
       api-key: ${OPEN_AI_KEY}
+      embedding:
+        enabled: false
 
     ## for multi-model we need to set false, default its true
     chat:
@@ -17,11 +22,22 @@ spring:
         repository:
           jdbc:
             initialize-schema: always
+    vectorstore:
+      qdrant:
+        initialize-schema : true
+        host : localhost
+        port : 6334
+        collection-name : spring-vector
 #Datasource
   datasource:
     url: jdbc:mysql://localhost:3306/spring-ai
     username: root
     password: root
+
+  docker:
+    compose:
+      stop:
+        command: down
 
 logging:
   level:
