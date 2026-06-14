@@ -21,6 +21,7 @@ import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
 public class RagController {
 
     private final ChatClient gemmaChatClient;
+    private final ChatClient gemmaWebChatClient;
     private final VectorStore vectorStore;
 
     @Value("classpath:/promptTemplate/systemPromptRandomDataTemplate.st")
@@ -29,9 +30,10 @@ public class RagController {
     @Value("classpath:/promptTemplate/systemPromptDocDataTemplate.st")
     Resource promptHRTemplate;
 
-    public RagController(@Qualifier("gemmaChatMemoryClient") ChatClient gemmaChatClient, VectorStore vectorStore) {
+    public RagController(@Qualifier("gemmaChatMemoryClient") ChatClient gemmaChatClient, VectorStore vectorStore, @Qualifier("WebSearchRAGChatClient") ChatClient gemmaWebChatClient) {
         this.gemmaChatClient = gemmaChatClient;
         this.vectorStore = vectorStore;
+        this.gemmaWebChatClient = gemmaWebChatClient;
     }
 
     @GetMapping(value = "random/gemma/chat")
@@ -78,6 +80,16 @@ public class RagController {
     @GetMapping(value = "doc/gemma/chat/v2")
     ResponseEntity<String> gemmaDocumentChatWithoutSystemPrompt(@RequestParam("message") String message, @RequestHeader("username") String userName){
         String  result = gemmaChatClient
+                .prompt()
+                .user(message).advisors(advisorSpec -> advisorSpec.param(CONVERSATION_ID,userName))
+                .call()
+                .content();
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "web-serch/gemma/chat")
+    ResponseEntity<String> gemmaWebSearchChat(@RequestParam("message") String message, @RequestHeader("username") String userName){
+        String  result = gemmaWebChatClient
                 .prompt()
                 .user(message).advisors(advisorSpec -> advisorSpec.param(CONVERSATION_ID,userName))
                 .call()

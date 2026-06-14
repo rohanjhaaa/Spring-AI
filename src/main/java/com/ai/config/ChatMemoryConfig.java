@@ -1,6 +1,7 @@
 package com.ai.config;
 
 import com.ai.advisors.TokenUsageAuditAdvisor;
+import com.ai.rag.ScoreFilterPostProcessor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -13,6 +14,7 @@ import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.rag.preretrieval.query.transformation.TranslationQueryTransformer;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -82,12 +84,17 @@ public class ChatMemoryConfig {
     }
 
     @Bean
-    RetrievalAugmentationAdvisor retrievalAugmentationAdvisor(VectorStore vectorStore){
+    RetrievalAugmentationAdvisor retrievalAugmentationAdvisor(VectorStore vectorStore, @Qualifier("memoryGemmaModel")
+    OllamaChatModel gemmaModel, ScoreFilterPostProcessor scoreFilterPostProcessor){
+        ChatClient.Builder builder = ChatClient.builder(gemmaModel);
         return RetrievalAugmentationAdvisor.builder()
+                .queryTransformers(TranslationQueryTransformer.builder().chatClientBuilder(builder)
+                        .targetLanguage("english").build())
                 .documentRetriever(VectorStoreDocumentRetriever.builder().vectorStore(vectorStore)
                         .topK(3)
                         .similarityThreshold(0.5)
                         .build())
+                .documentPostProcessors(scoreFilterPostProcessor)  // used to post processor document
                 .build();
     }
 
