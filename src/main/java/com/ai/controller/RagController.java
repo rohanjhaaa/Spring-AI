@@ -30,7 +30,7 @@ public class RagController {
     @Value("classpath:/promptTemplate/systemPromptDocDataTemplate.st")
     Resource promptHRTemplate;
 
-    public RagController(@Qualifier("gemmaChatMemoryClient") ChatClient gemmaChatClient, VectorStore vectorStore, @Qualifier("WebSearchRAGChatClient") ChatClient gemmaWebChatClient) {
+    public RagController(@Qualifier("gemmaRagChatMemoryClient") ChatClient gemmaChatClient, VectorStore vectorStore, @Qualifier("WebSearchRAGChatClient") ChatClient gemmaWebChatClient) {
         this.gemmaChatClient = gemmaChatClient;
         this.vectorStore = vectorStore;
         this.gemmaWebChatClient = gemmaWebChatClient;

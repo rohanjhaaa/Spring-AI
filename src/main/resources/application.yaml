@@ -39,6 +39,10 @@ spring:
       stop:
         command: down
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+
 logging:
   level:
     org:

@@ -35,10 +35,15 @@ public class ChatMemoryConfig {
     @Bean
     ChatMemory chatMemory(JdbcChatMemoryRepository jdbcChatMemoryRepository){
         return MessageWindowChatMemory.builder()
-                .maxMessages(10)
+                .maxMessages(20)
                 .chatMemoryRepository(jdbcChatMemoryRepository)
                 .build();
     }
+
+//    @Bean("chatMemoryToolCalling")
+//    ChatMemory chatMemoryToolCalling(){
+//        return MessageWindowChatMemory.builder().build();
+//    }
 
 //    @Bean
 //    public OllamaChatModel llamaModel(OllamaApi ollamaApi) {
@@ -57,7 +62,7 @@ public class ChatMemoryConfig {
 
         return OllamaChatModel.builder()
                 .ollamaApi(ollamaApi)
-                .defaultOptions(
+                .options(
                         OllamaChatOptions.builder()
                                 .model("gemma3:latest")
                                 .build())
@@ -74,7 +79,16 @@ public class ChatMemoryConfig {
 //    }
 
     @Bean("gemmaChatMemoryClient")
-    public ChatClient gemmaChatClient(@Qualifier("memoryGemmaModel") OllamaChatModel gemmaModel, ChatMemory chatMemory, RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
+    public ChatClient gemmaChatClient(@Qualifier("memoryGemmaModel") OllamaChatModel gemmaModel, ChatMemory chatMemory) {
+        Advisor memoryAdvisor =  MessageChatMemoryAdvisor.builder(chatMemory).build();
+        Advisor tokenUsageAdvisor = new TokenUsageAuditAdvisor();
+        ChatClient.Builder chatClientBuilder = ChatClient.builder(gemmaModel)
+                .defaultAdvisors(List.of(new SimpleLoggerAdvisor(), memoryAdvisor, tokenUsageAdvisor));
+        return chatClientBuilder.build();
+    }
+
+    @Bean("gemmaRagChatMemoryClient")
+    public ChatClient gemmaRagChatClient(@Qualifier("memoryGemmaModel") OllamaChatModel gemmaModel, ChatMemory chatMemory, RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
         Advisor memoryAdvisor =  MessageChatMemoryAdvisor.builder(chatMemory).build();
         Advisor tokenUsageAdvisor = new TokenUsageAuditAdvisor();
         ChatClient.Builder chatClientBuilder = ChatClient.builder(gemmaModel)

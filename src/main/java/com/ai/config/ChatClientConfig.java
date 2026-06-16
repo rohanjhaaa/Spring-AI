@@ -21,7 +21,7 @@ public class ChatClientConfig {
 
         return OllamaChatModel.builder()
                 .ollamaApi(ollamaApi)
-                .defaultOptions(
+                .options(
                         OllamaChatOptions.builder()
                                 .model("llama3.2:1b")
                                 .build())
@@ -33,7 +33,7 @@ public class ChatClientConfig {
 
         return OllamaChatModel.builder()
                 .ollamaApi(ollamaApi)
-                .defaultOptions(
+                .options(
                         OllamaChatOptions.builder()
                                 .model("gemma3:latest")
                                 .build())
