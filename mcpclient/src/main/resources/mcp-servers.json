@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "filesystem": {
+      "command": "C:/nvm4w/nodejs/npx.cmd",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:/Users/rohan/Downloads/mcp"
+      ]
+    }
+  }
+}
