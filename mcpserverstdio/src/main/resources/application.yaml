@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: MCP-Server
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring-ai
+    username: root
+    password: root
+
+  main:
+    web-application-type : none
+    banner-mode : off
+logging:
+  level:
+    root: error
+

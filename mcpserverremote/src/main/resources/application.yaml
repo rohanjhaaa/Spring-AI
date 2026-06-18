@@ -1,0 +1,16 @@
+server:
+  port: 7777
+
+spring:
+  application:
+    name: MCP-Remote
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring-ai
+    username: root
+    password: root
+
+  ai:
+    mcp:
+      server:
+        protocol: streamable

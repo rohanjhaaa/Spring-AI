@@ -27,6 +27,11 @@ spring:
       client:
         stdio:
           servers-configuration: classpath:mcp-servers.json
+        streamable-http:
+          connections:
+            spring-ai:
+              url: http://localhost:7777
+              endpoint: /mcp
 
 #Datasource
   datasource:
