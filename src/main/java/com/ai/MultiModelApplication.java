@@ -1,5 +1,6 @@
 package com.ai;
 
+import org.springframework.ai.audio.transcription.TranscriptionModel;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.boot.ApplicationRunner;
