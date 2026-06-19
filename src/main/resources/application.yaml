@@ -1,6 +1,6 @@
 spring:
   application:
-    name: MultiModel
+    name: Relevancy-Evaluator
 
   ai:
     ollama:
@@ -22,26 +22,12 @@ spring:
         repository:
           jdbc:
             initialize-schema: always
-    vectorstore:
-      qdrant:
-        initialize-schema : true
-        host : localhost
-        port : 6334
-        collection-name : spring-vector
+
 #Datasource
   datasource:
     url: jdbc:mysql://localhost:3306/spring-ai
     username: root
     password: root
-
-  docker:
-    compose:
-      stop:
-        command: down
-
-  jpa:
-    hibernate:
-      ddl-auto: update
 
 logging:
   level:
@@ -54,8 +40,3 @@ logging:
               advisor: DEBUG # Sets org.springframework.ai.chat.client.advisor to DEBUG
         web:
           client: TRACE # Sets org.springframework.web.client to TRACE
-
-# Tavily
-tavily:
-  base-url: https://api.tavily.com/search
-  api-key:  ${TAVILY_API_KEY}

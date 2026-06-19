@@ -15,7 +15,6 @@ public class ChatMemoryController {
     private final ChatClient gemmaChatClient;
 
     public ChatMemoryController(@Qualifier("gemmaChatMemoryClient") ChatClient gemmaChatClient) {
-        System.out.println("Injected chat client = " +gemmaChatClient.getClass().getName());
         this.gemmaChatClient = gemmaChatClient;
     }
 
